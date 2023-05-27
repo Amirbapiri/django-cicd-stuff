@@ -53,7 +53,7 @@ class RegisterationAPI(APIView):
     class RegistrationOutputSerializer(serializers.ModelSerializer):
         class Meta:
             model = User
-            fields = ("email", )
+            fields = ("email", "created_at", "updated_at")
 
     @extend_schema(request=RegistrationInputSerializer, responses=RegistrationOutputSerializer)
     def post(self, request, *args, **kwargs):
