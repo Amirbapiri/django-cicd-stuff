@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.apps import apps
 from django.contrib.auth.hashers import make_password
@@ -98,4 +99,17 @@ class BaseUser(BaseModel, AbstractBaseUser, PermissionsMixin):
         return self.is_admin
 
 
+class Profile(models.Model):
+    user = models.OneToOneField(
+        get_user_model(),
+        related_name="profile",
+        on_delete=models.CASCADE
+    )
+    posts_number = models.PositiveIntegerField(default=0)
+    subscriber_number = models.PositiveIntegerField(default=0)
+    subscription_number = models.PositiveIntegerField(default=0)
+    bio = models.TextField(max_length=300, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.user}'s profile"
 
