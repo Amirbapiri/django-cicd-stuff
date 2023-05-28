@@ -4,6 +4,7 @@ from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView, status
 from drf_spectacular.utils import extend_schema
+from rest_framework_simplejwt.serializers import RefreshToken
 from djangocicd.users.models import Profile
 
 from djangocicd.api.mixins import ApiAuthMixin
@@ -51,9 +52,22 @@ class RegisterationAPI(APIView):
         
 
     class RegistrationOutputSerializer(serializers.ModelSerializer):
+        token = serializers.SerializerMethodField("get_token")
+
         class Meta:
             model = User
-            fields = ("email", "created_at", "updated_at")
+            fields = ("email", "token", "created_at", "updated_at")
+
+        def get_token(self, user):
+            token_class = RefreshToken
+            data = dict()
+
+            refresh = token_class.for_user(user)
+
+            data["refresh"] = str(refresh)
+            data["access"] = str(refresh.access_token)
+
+            return data
 
     @extend_schema(request=RegistrationInputSerializer, responses=RegistrationOutputSerializer)
     def post(self, request, *args, **kwargs):
