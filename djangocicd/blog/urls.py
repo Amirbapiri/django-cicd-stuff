@@ -1,9 +1,12 @@
 from django.urls import path
 
-from djangocicd.blog.apis.products import ProductAPI 
-
+from .apis.posts import post_api, post_detail_api
+from .apis.subscriptions import subscriber_api, subscriber_detail_api
 
 urlpatterns = [
-    path("products/", ProductAPI.as_view(), name="products"),
+    path("subscribe/", subscriber_api, name="subscribe"),
+    path("subscribe/<str:email>/", subscriber_detail_api, name="subscribe_detail"),
+    path("posts/", post_api, name="posts"),
+    path("posts/<slug:slug>/", post_detail_api, name="post_detail"),
 ]
 
