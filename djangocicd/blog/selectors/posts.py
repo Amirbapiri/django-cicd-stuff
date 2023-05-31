@@ -8,7 +8,7 @@ from djangocicd.blog.models import Post, Subscription
 User = get_user_model()
 
 
-def get_all_posts(*, filters, user: User, self_include: bool = True) -> QuerySet[Post]:
+def get_all_posts(*, filters=None, user: User, self_include: bool = True) -> QuerySet[Post]:
     filters = filters or ()
     subscriptions = list(Subscription.objects.filter(subscriber=user).values_list("target"))
     if self_include:
