@@ -19,6 +19,7 @@ LOCAL_APPS = [
     'djangocicd.authentication.apps.AuthenticationConfig',
     "djangocicd.users.apps.UsersConfig",
     "djangocicd.blog.apps.BlogConfig",
+    "djangocicd.tasks.apps.TasksConfig",
 ]
 
 THIRD_PARTY_APPS = [

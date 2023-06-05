@@ -26,10 +26,10 @@ def count_user_subscriptions(*, user: User) -> int:
 
 def cache_profile(user: User):
     profile = {
-            "posts_number": count_user_posts(user=user),
-            "subscribers_number": count_user_subscribers(user=user),
-            "subscriptions_number": count_user_subscriptions(user=user),
-            }
+        "posts_number": count_user_posts(user=user),
+        "subscribers_number": count_user_subscribers(user=user),
+        "subscriptions_number": count_user_subscriptions(user=user),
+    }
     cache.set(f"profile_{user}", profile, timeout=None)
 
 
