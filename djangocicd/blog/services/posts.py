@@ -45,6 +45,7 @@ def subscribe(*, user: User, email: str) -> QuerySet[Subscription]:
 def unsubscribe(*, user: User, email: str) -> None:
     target = get_object_or_404(User, email=email)
     Subscription.objects.get(subscriber=user, target=target).delete()
+    cache_profile(user=user)
 
 
 @transaction.atomic
