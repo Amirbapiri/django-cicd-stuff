@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.core.validators import MinLengthValidator
+from django.core.cache import cache
 from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView, status
@@ -21,6 +22,19 @@ class ProfileAPI(ApiAuthMixin, APIView):
         class Meta:
             model = Profile
             exclude = ("id", "user")
+
+        def to_representation(self, instance):
+            repr = super().to_representation(instance)
+            user_email = instance.user.email
+            # getting cached data based onthe user's email
+            # key of cached data is expected to be the following pattern:
+            # profile_<user_email>
+            profile_cache = cache.get(f"profile_{user_email}", {})
+            if profile_cache:
+                repr["posts_number"] = profile_cache.get("posts_number")
+                repr["subscriber_number"] = profile_cache.get("subscriber_number", 0)
+                repr["subscription_number"] = profile_cache.get("subscription_number", 0)
+            return repr
 
     @extend_schema(responses=ProfileOutputSerializer)
     def get(self, request):
